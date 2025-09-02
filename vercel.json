@@ -5,11 +5,18 @@
   "framework": "nextjs",
   "devCommand": "npm run dev",
   "env": {
-    "FORCE_CACHE_REFRESH": "v2.1.4"
+    "FORCE_CACHE_REFRESH": "v2.1.5"
   },
   "functions": {
     "app/api/**/*.ts": {
       "maxDuration": 30
     }
-  }
+  },
+  "regions": ["hkg1", "sin1", "nrt1"],
+  "crons": [
+    {
+      "path": "/api/health",
+      "schedule": "0 */6 * * *"
+    }
+  ]
 }
