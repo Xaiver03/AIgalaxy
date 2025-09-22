@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from 'react'
 import dynamic from 'next/dynamic'
+import AgentsCardGrid from '@/components/AgentsCardGrid'
+import { StarField } from '@/components/StarField'
 
 const GalaxyStarSystem = dynamic(() => import('@/components/GalaxyStarSystem'), {
   loading: () => <div style={{ 
@@ -34,6 +36,8 @@ interface Agent {
   guideUrl?: string
   homepage?: string
   icon?: string
+  coverImage?: string | null
+  themeColor?: string | null
   enabled: boolean
   clickCount?: number
 }
@@ -47,9 +51,30 @@ export default function Galaxy3DPage() {
   const [loading, setLoading] = useState(true)
   const [danmakuInputVisible, setDanmakuInputVisible] = useState(false)
   const [danmakuPlaying, setDanmakuPlaying] = useState(false)
+  const [viewMode, setViewMode] = useState<'galaxy' | 'cards'>(() => {
+    if (typeof window === 'undefined') return 'galaxy'
+    return (localStorage.getItem('ai-galaxy-view') as 'galaxy' | 'cards') || 'galaxy'
+  })
+  const [hydrated, setHydrated] = useState(false)
 
   useEffect(() => {
     fetchAgents()
+  }, [])
+
+  useEffect(() => {
+    // 持久化视图模式
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('ai-galaxy-view', viewMode)
+    }
+  }, [viewMode])
+
+  useEffect(() => {
+    // 首次挂载后再读取一次，避免SSR导致的初始值不一致
+    if (typeof window !== 'undefined') {
+      const saved = (localStorage.getItem('ai-galaxy-view') as 'galaxy' | 'cards') || 'galaxy'
+      if (saved !== viewMode) setViewMode(saved)
+    }
+    setHydrated(true)
   }, [])
 
   useEffect(() => {
@@ -96,7 +121,7 @@ export default function Galaxy3DPage() {
     }
   }
 
-  if (loading) {
+  if (loading || !hydrated) {
     return (
       <div style={{
         minHeight: '100vh',
@@ -188,10 +213,18 @@ export default function Galaxy3DPage() {
         }
       `}</style>
 
-      {/* 银河系AI星图 - 基于点击次数的星等系统 */}
-      <GalaxyStarSystem 
-        agents={filteredAgents}
-      />
+      {/* 视图区域 */}
+      {viewMode === 'galaxy' ? (
+        <GalaxyStarSystem 
+          agents={filteredAgents.map(a => ({ ...a, themeColor: a.themeColor || undefined })) as any}
+        />
+      ) : (
+        <>
+          {/* 共享星空背景 */}
+          <StarField />
+          <AgentsCardGrid agents={filteredAgents} />
+        </>
+      )}
 
       {/* 搜索和筛选控制 */}
       <div style={{
@@ -214,7 +247,7 @@ export default function Galaxy3DPage() {
         </div>
         <input
           type="text"
-          placeholder="搜索星星..."
+          placeholder={viewMode === 'galaxy' ? '搜索星星...' : '搜索工具...'}
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           style={{
@@ -246,7 +279,7 @@ export default function Galaxy3DPage() {
           ))}
         </select>
         <div style={{ marginTop: '8px', fontSize: '12px', opacity: 0.7 }}>
-          ⭐ {filteredAgents.length} 颗AI星星
+          {viewMode === 'galaxy' ? `⭐ ${filteredAgents.length} 颗AI星星` : `🗂️ ${filteredAgents.length} 个AI工具`}
         </div>
         
         {/* 弹幕控制区域 */}
@@ -364,16 +397,46 @@ export default function Galaxy3DPage() {
         </div>
       </div>
 
-      {/* 底部版权信息 */}
-      <div style={{
-        position: 'fixed',
-        bottom: '10px',
-        right: '20px',
-        color: 'rgba(255, 255, 255, 0.3)',
-        fontSize: '12px',
-        zIndex: 100
-      }}>
-        ⭐ MiraclePlus AI Galaxy Star System
+      {/* 右下角视图切换 + 版权 */}
+      <div style={{ position: 'fixed', bottom: '16px', right: '16px', zIndex: 1200, display: 'flex', flexDirection: 'column', gap: '6px', alignItems: 'flex-end' }}>
+        <div
+          style={{
+            display: 'flex',
+            background: 'rgba(0,0,0,0.85)',
+            border: '1px solid rgba(255,255,255,0.2)',
+            borderRadius: 999,
+            overflow: 'hidden',
+            boxShadow: '0 8px 20px rgba(0,0,0,0.4)'
+          }}
+        >
+          <button
+            onClick={() => setViewMode('galaxy')}
+            style={{
+              padding: '6px 10px',
+              fontSize: 12,
+              color: viewMode === 'galaxy' ? '#111' : '#ddd',
+              background: viewMode === 'galaxy' ? '#fff' : 'transparent',
+              border: 'none',
+              cursor: 'pointer'
+            }}
+          >
+            🪐 星系
+          </button>
+          <button
+            onClick={() => setViewMode('cards')}
+            style={{
+              padding: '6px 10px',
+              fontSize: 12,
+              color: viewMode === 'cards' ? '#111' : '#ddd',
+              background: viewMode === 'cards' ? '#fff' : 'transparent',
+              border: 'none',
+              cursor: 'pointer'
+            }}
+          >
+            🗂️ 卡片
+          </button>
+        </div>
+        <div style={{ color: 'rgba(255,255,255,0.35)', fontSize: 12 }}>⭐ MiraclePlus AI Galaxy Star System</div>
       </div>
 
       {/* 弹幕系统 */}
