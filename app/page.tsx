@@ -2,8 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import dynamic from 'next/dynamic'
-import AgentsCardGrid from '@/components/AgentsCardGrid'
-import { StarField } from '@/components/StarField'
+import ProductCards from '@/components/ProductCards'
 
 const GalaxyStarSystem = dynamic(() => import('@/components/GalaxyStarSystem'), {
   loading: () => <div style={{ 
@@ -31,7 +30,7 @@ interface Agent {
   id: string
   name: string
   description: string
-  tags: string[]
+  tags: string[] | string
   manager: string
   guideUrl?: string
   homepage?: string
@@ -219,11 +218,15 @@ export default function Galaxy3DPage() {
           agents={filteredAgents.map(a => ({ ...a, themeColor: a.themeColor || undefined })) as any}
         />
       ) : (
-        <>
-          {/* 共享星空背景 */}
-          <StarField />
-          <AgentsCardGrid agents={filteredAgents} />
-        </>
+        <ProductCards 
+          agents={filteredAgents}
+          loading={loading}
+          searchTerm={searchTerm}
+          selectedTag={selectedTag}
+          allTags={allTags}
+          onSearchChange={setSearchTerm}
+          onTagChange={setSelectedTag}
+        />
       )}
 
       {/* 搜索和筛选控制（Galaxy 模式：左侧面板 | 卡片模式：顶栏一行） */}
