@@ -101,7 +101,7 @@ export default function Galaxy3DPage() {
   const fetchAgents = async () => {
     try {
       setLoading(true)
-      const response = await fetch('/api/agents')
+      const response = await fetch(`/api/agents?_=${Date.now()}` as any, { cache: 'no-store' as RequestCache })
       if (!response.ok) throw new Error('Failed to fetch agents')
       const data = await response.json()
       setAgents(data.agents)
