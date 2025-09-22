@@ -245,6 +245,46 @@ export default function Galaxy3DPage() {
         <div style={{ marginBottom: '12px', fontWeight: 'bold' }}>
           🌌 奇绩AI星图
         </div>
+        {/* 视图切换（备选入口） */}
+        <div style={{
+          display: 'flex',
+          gap: '6px',
+          marginBottom: '10px',
+          background: 'rgba(255,255,255,0.06)',
+          borderRadius: 999,
+          padding: 2,
+        }}>
+          <button
+            onClick={() => setViewMode('galaxy')}
+            style={{
+              flex: 1,
+              padding: '6px 8px',
+              fontSize: 12,
+              borderRadius: 999,
+              border: 'none',
+              cursor: 'pointer',
+              color: viewMode === 'galaxy' ? '#111' : '#ddd',
+              background: viewMode === 'galaxy' ? '#fff' : 'transparent',
+            }}
+          >
+            🪐 星系
+          </button>
+          <button
+            onClick={() => setViewMode('cards')}
+            style={{
+              flex: 1,
+              padding: '6px 8px',
+              fontSize: 12,
+              borderRadius: 999,
+              border: 'none',
+              cursor: 'pointer',
+              color: viewMode === 'cards' ? '#111' : '#ddd',
+              background: viewMode === 'cards' ? '#fff' : 'transparent',
+            }}
+          >
+            🗂️ 卡片
+          </button>
+        </div>
         <input
           type="text"
           placeholder={viewMode === 'galaxy' ? '搜索星星...' : '搜索工具...'}
