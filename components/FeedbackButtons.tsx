@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Button, Space, message, Tooltip, Typography } from 'antd'
+import { Button, Space, message, Tooltip, Typography, Modal } from 'antd'
 
 const { Title } = Typography
 import { 
@@ -20,6 +20,7 @@ interface FeedbackButton {
   url: string
   icon?: string
   color?: string
+  qrImage?: string
   order: number
   enabled: boolean
 }
@@ -59,11 +60,46 @@ export function FeedbackButtons() {
   }
 
   const handleButtonClick = (button: FeedbackButton) => {
-    if (button.url) {
+    // 如果有二维码图片，优先显示二维码弹窗
+    if (button.qrImage) {
+      showQRModal(button)
+    } else if (button.url) {
       window.open(button.url, '_blank')
     } else {
       message.warning('反馈链接未配置')
     }
+  }
+
+  const showQRModal = (button: FeedbackButton) => {
+    Modal.info({
+      title: button.title,
+      content: (
+        <div style={{ textAlign: 'center', padding: '20px 0' }}>
+          <img 
+            src={button.qrImage} 
+            alt={`${button.title}二维码`}
+            style={{ 
+              maxWidth: '200px', 
+              maxHeight: '200px',
+              width: '100%',
+              height: 'auto'
+            }}
+          />
+          <p style={{ marginTop: 16, color: '#666' }}>
+            {button.description || '请使用微信等应用扫描二维码'}
+          </p>
+          {button.url && (
+            <p style={{ marginTop: 8 }}>
+              <a href={button.url} target="_blank" rel="noopener noreferrer">
+                或点击此处直接访问
+              </a>
+            </p>
+          )}
+        </div>
+      ),
+      okText: '关闭',
+      width: 300,
+    })
   }
 
   const getIcon = (iconName?: string) => {

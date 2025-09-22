@@ -38,6 +38,7 @@ model Agent {
   coverImage  String?  @map("cover_image")
   guideContent String? @map("guide_content")
   themeColor  String?  @default("#FFFFFF") @map("theme_color") // 星球主题颜色
+  miracleTutorialUrl String? @map("miracle_tutorial_url") // 奇绩教程链接
   enabled     Boolean  @default(true) // 是否可见（显示在前端）
   clickCount  Int      @default(0) @map("click_count")
   createdAt   DateTime @default(now()) @map("created_at")
@@ -124,6 +125,7 @@ model FeedbackButton {
   url         String
   icon        String?  // 图标类型，如 'message', 'form', 'survey' 等
   color       String?  // 按钮颜色，如 '#1890ff'
+  qrImage     String?  // 二维码图片URL
   order       Int      @default(0) // 排序顺序
   enabled     Boolean  @default(true)
   createdAt   DateTime @default(now()) @map("created_at")

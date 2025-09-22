@@ -20,6 +20,7 @@ interface Agent {
   guideUrl?: string
   homepage?: string
   icon?: string
+  miracleTutorialUrl?: string
   createdAt: string
   applications: any[]
   feedback: any[]
@@ -419,23 +420,44 @@ export default function AgentDetailPage() {
               </Space>
             }
             extra={
-              tutorialConfig && tutorialConfig.enabled && (
-                <Button
-                  type="primary"
-                  icon={<FireOutlined />}
-                  size="small"
-                  onClick={() => {
-                    window.open(tutorialConfig.miracle_tutorial_url, '_blank')
-                  }}
-                  style={{
-                    background: 'linear-gradient(135deg, #ff6b6b, #ee5a24)',
-                    border: 'none',
-                    boxShadow: '0 2px 8px rgba(238, 90, 36, 0.3)'
-                  }}
-                >
-                  {tutorialConfig.title || '奇绩教程'}
-                </Button>
-              )
+              <Space>
+                {/* 工具专属奇绩教程链接 */}
+                {agent.miracleTutorialUrl && (
+                  <Button
+                    type="primary"
+                    icon={<FireOutlined />}
+                    size="small"
+                    onClick={() => {
+                      window.open(agent.miracleTutorialUrl, '_blank')
+                    }}
+                    style={{
+                      background: 'linear-gradient(135deg, #ff6b6b, #ee5a24)',
+                      border: 'none',
+                      boxShadow: '0 2px 8px rgba(238, 90, 36, 0.3)'
+                    }}
+                  >
+                    奇绩教程
+                  </Button>
+                )}
+                {/* 全局奇绩教程配置 */}
+                {!agent.miracleTutorialUrl && tutorialConfig && tutorialConfig.enabled && (
+                  <Button
+                    type="primary"
+                    icon={<FireOutlined />}
+                    size="small"
+                    onClick={() => {
+                      window.open(tutorialConfig.miracle_tutorial_url, '_blank')
+                    }}
+                    style={{
+                      background: 'linear-gradient(135deg, #ff6b6b, #ee5a24)',
+                      border: 'none',
+                      boxShadow: '0 2px 8px rgba(238, 90, 36, 0.3)'
+                    }}
+                  >
+                    {tutorialConfig.title || '奇绩教程'}
+                  </Button>
+                )}
+              </Space>
             }
           >
             <div className="prose max-w-none">
@@ -443,7 +465,7 @@ export default function AgentDetailPage() {
             </div>
             
             {/* 奇绩教程说明卡片 */}
-            {tutorialConfig && tutorialConfig.enabled && tutorialConfig.description && (
+            {((agent.miracleTutorialUrl) || (tutorialConfig && tutorialConfig.enabled && tutorialConfig.description)) && (
               <Card
                 size="small"
                 style={{
@@ -456,7 +478,11 @@ export default function AgentDetailPage() {
                 <Space>
                   <FireOutlined style={{ color: '#ef4444' }} />
                   <Text style={{ color: '#dc2626' }}>
-                    <strong>奇绩教程：</strong>{tutorialConfig.description}
+                    <strong>奇绩教程：</strong>
+                    {agent.miracleTutorialUrl 
+                      ? `${agent.name} 专属教程内容` 
+                      : (tutorialConfig?.description || '点击上方按钮查看详细教程')
+                    }
                   </Text>
                 </Space>
               </Card>

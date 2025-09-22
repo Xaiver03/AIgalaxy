@@ -17,7 +17,7 @@ const RichTextEditor = dynamic(() => import('@/components/RichTextEditor'), {
 const { Title, Text } = Typography
 const { TextArea } = Input
 const { Option } = Select
-const { TabPane } = Tabs
+// const { TabPane } = Tabs // Deprecated - using items prop instead
 
 interface Agent {
   id: string
@@ -29,6 +29,7 @@ interface Agent {
   icon?: string
   coverImage?: string
   guideContent?: string
+  miracleTutorialUrl?: string
   enabled: boolean
   themeColor?: string
   createdAt: string
@@ -65,6 +66,7 @@ interface FeedbackButton {
   url: string
   icon?: string
   color?: string
+  qrImage?: string
   order: number
   enabled: boolean
   createdAt: string
@@ -753,109 +755,137 @@ export default function AdminDashboard() {
 
         {/* Tabs */}
         <Card loading={loading}>
-          <Tabs activeKey={activeTab} onChange={setActiveTab}>
-            <TabPane tab={`工具管理 (${agents.length})`} key="agents">
-              <Table
-                columns={agentColumns}
-                dataSource={agents}
-                rowKey="id"
-                pagination={{ pageSize: 10 }}
-              />
-            </TabPane>
-            <TabPane tab={`申请审核 (${applications.filter(a => a.status === 'PENDING').length})`} key="applications">
-              <Table
-                columns={applicationColumns}
-                dataSource={applications}
-                rowKey="id"
-                pagination={{ pageSize: 10 }}
-              />
-            </TabPane>
-            <TabPane tab={`用户反馈 (${feedback.length})`} key="feedback">
-              <Table
-                columns={feedbackColumns}
-                dataSource={feedback}
-                rowKey="id"
-                pagination={{ pageSize: 10 }}
-              />
-            </TabPane>
-            <TabPane tab={`按钮配置 (${feedbackButtons.length})`} key="buttons">
-              <Space style={{ marginBottom: 16 }}>
-                <Button
-                  type="primary"
-                  icon={<PlusOutlined />}
-                  onClick={() => {
-                    setEditingButton(null)
-                    buttonForm.resetFields()
-                    setButtonModalVisible(true)
-                  }}
-                >
-                  添加按钮
-                </Button>
-              </Space>
-              <Table
-                columns={buttonColumns}
-                dataSource={feedbackButtons}
-                rowKey="id"
-                pagination={{ pageSize: 10 }}
-              />
-            </TabPane>
-            <TabPane tab="奇绩教程配置" key="tutorial">
-              <Space style={{ marginBottom: 16 }}>
-                <Button
-                  type="primary"
-                  icon={<SettingOutlined />}
-                  onClick={() => {
-                    if (tutorialConfig) {
-                      tutorialForm.setFieldsValue({
-                        miracleTutorialUrl: tutorialConfig.miracle_tutorial_url,
-                        enabled: tutorialConfig.enabled,
-                        title: tutorialConfig.title,
-                        description: tutorialConfig.description
-                      })
-                    }
-                    setTutorialModalVisible(true)
-                  }}
-                >
-                  配置教程链接
-                </Button>
-              </Space>
-              
-              {tutorialConfig && (
-                <Card title="当前配置" style={{ marginTop: 16 }}>
-                  <Row gutter={16}>
-                    <Col span={12}>
-                      <div style={{ marginBottom: 16 }}>
-                        <Text strong>按钮标题：</Text>
-                        <div>{tutorialConfig.title || '奇绩教程'}</div>
-                      </div>
-                      <div style={{ marginBottom: 16 }}>
-                        <Text strong>教程链接：</Text>
-                        <div>
-                          <a href={tutorialConfig.miracle_tutorial_url} target="_blank" rel="noopener noreferrer">
-                            {tutorialConfig.miracle_tutorial_url}
-                          </a>
-                        </div>
-                      </div>
-                    </Col>
-                    <Col span={12}>
-                      <div style={{ marginBottom: 16 }}>
-                        <Text strong>启用状态：</Text>
-                        <div>
-                          <Tag color={tutorialConfig.enabled ? 'success' : 'default'}>
-                            {tutorialConfig.enabled ? '已启用' : '已禁用'}
-                          </Tag>
-                        </div>
-                      </div>
-                      <div style={{ marginBottom: 16 }}>
-                        <Text strong>描述：</Text>
-                        <div>{tutorialConfig.description || '无描述'}</div>
-                      </div>
-                    </Col>
-                  </Row>
-                </Card>
-              )}
-            </TabPane>
-          </Tabs>
+          <Tabs 
+            activeKey={activeTab} 
+            onChange={setActiveTab}
+            items={[
+              {
+                key: 'agents',
+                label: `工具管理 (${agents.length})`,
+                children: (
+                  <Table
+                    columns={agentColumns}
+                    dataSource={agents}
+                    rowKey="id"
+                    pagination={{ pageSize: 10 }}
+                  />
+                )
+              },
+              {
+                key: 'applications',
+                label: `申请审核 (${applications.filter(a => a.status === 'PENDING').length})`,
+                children: (
+                  <Table
+                    columns={applicationColumns}
+                    dataSource={applications}
+                    rowKey="id"
+                    pagination={{ pageSize: 10 }}
+                  />
+                )
+              },
+              {
+                key: 'feedback',
+                label: `用户反馈 (${feedback.length})`,
+                children: (
+                  <Table
+                    columns={feedbackColumns}
+                    dataSource={feedback}
+                    rowKey="id"
+                    pagination={{ pageSize: 10 }}
+                  />
+                )
+              },
+              {
+                key: 'buttons',
+                label: `按钮配置 (${feedbackButtons.length})`,
+                children: (
+                  <>
+                    <Space style={{ marginBottom: 16 }}>
+                      <Button
+                        type="primary"
+                        icon={<PlusOutlined />}
+                        onClick={() => {
+                          setEditingButton(null)
+                          buttonForm.resetFields()
+                          setButtonModalVisible(true)
+                        }}
+                      >
+                        添加按钮
+                      </Button>
+                    </Space>
+                    <Table
+                      columns={buttonColumns}
+                      dataSource={feedbackButtons}
+                      rowKey="id"
+                      pagination={{ pageSize: 10 }}
+                    />
+                  </>
+                )
+              },
+              {
+                key: 'tutorial',
+                label: '奇绩教程配置',
+                children: (
+                  <>
+                    <Space style={{ marginBottom: 16 }}>
+                      <Button
+                        type="primary"
+                        icon={<SettingOutlined />}
+                        onClick={() => {
+                          if (tutorialConfig) {
+                            tutorialForm.setFieldsValue({
+                              miracleTutorialUrl: tutorialConfig.miracle_tutorial_url,
+                              enabled: tutorialConfig.enabled,
+                              title: tutorialConfig.title,
+                              description: tutorialConfig.description
+                            })
+                          }
+                          setTutorialModalVisible(true)
+                        }}
+                      >
+                        配置教程链接
+                      </Button>
+                    </Space>
+                    
+                    {tutorialConfig && (
+                      <Card title="当前配置" style={{ marginTop: 16 }}>
+                        <Row gutter={16}>
+                          <Col span={12}>
+                            <div style={{ marginBottom: 16 }}>
+                              <Text strong>按钮标题：</Text>
+                              <div>{tutorialConfig.title || '奇绩教程'}</div>
+                            </div>
+                            <div style={{ marginBottom: 16 }}>
+                              <Text strong>教程链接：</Text>
+                              <div>
+                                <a href={tutorialConfig.miracle_tutorial_url} target="_blank" rel="noopener noreferrer">
+                                  {tutorialConfig.miracle_tutorial_url}
+                                </a>
+                              </div>
+                            </div>
+                          </Col>
+                          <Col span={12}>
+                            <div style={{ marginBottom: 16 }}>
+                              <Text strong>启用状态：</Text>
+                              <div>
+                                <Tag color={tutorialConfig.enabled ? 'success' : 'default'}>
+                                  {tutorialConfig.enabled ? '已启用' : '已禁用'}
+                                </Tag>
+                              </div>
+                            </div>
+                            <div style={{ marginBottom: 16 }}>
+                              <Text strong>描述：</Text>
+                              <div>{tutorialConfig.description || '无描述'}</div>
+                            </div>
+                          </Col>
+                        </Row>
+                      </Card>
+                    )}
+                  </>
+                )
+              }
+            ]}
+          />
         </Card>
 
         {/* Add/Edit Modal */}
@@ -1014,7 +1044,7 @@ export default function AdminDashboard() {
             </Row>
 
             <Row gutter={16} style={{ marginTop: 16 }}>
-              <Col span={12}>
+              <Col span={8}>
                 <Form.Item label="使用指南链接" name="guideUrl">
                   <Input 
                     id="tool-guide-url"
@@ -1028,7 +1058,24 @@ export default function AdminDashboard() {
                   />
                 </Form.Item>
               </Col>
-              <Col span={12}>
+              <Col span={8}>
+                <Form.Item label="奇绩教程链接" name="miracleTutorialUrl">
+                  <Input 
+                    id="tool-miracle-tutorial-url"
+                    placeholder="https://example.com/miracle-tutorial" 
+                    style={{ 
+                      backgroundColor: '#fff', 
+                      color: '#000',
+                      border: '2px solid #000',
+                      borderRadius: '4px'
+                    }} 
+                  />
+                  <div style={{ fontSize: 12, color: '#666', marginTop: 4 }}>
+                    工具专属的奇绩教程链接，会在工具详情页显示按钮
+                  </div>
+                </Form.Item>
+              </Col>
+              <Col span={8}>
                 <Space>
                   <Button
                     type="default"
@@ -1227,6 +1274,18 @@ export default function AdminDashboard() {
                 </Form.Item>
               </Col>
             </Row>
+            <Form.Item
+              label="二维码图片"
+              name="qrImage"
+            >
+              <ImageUpload
+                value={buttonForm.getFieldValue('qrImage')}
+                onChange={(url) => buttonForm.setFieldsValue({ qrImage: url })}
+              />
+              <div style={{ fontSize: 12, color: '#666', marginTop: 8 }}>
+                上传二维码图片，用户点击按钮时优先显示二维码而非跳转链接
+              </div>
+            </Form.Item>
             <Form.Item
               label="可见状态"
               name="enabled"
