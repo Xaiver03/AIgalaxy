@@ -25,7 +25,7 @@ const AgentsCardGrid: React.FC<AgentsCardGridProps> = ({ agents }) => {
     <div
       style={{
         position: 'relative',
-        padding: '100px 24px 120px',
+        padding: '16px 24px 120px',
         zIndex: 10,
       }}
     >
