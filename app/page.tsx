@@ -226,175 +226,102 @@ export default function Galaxy3DPage() {
         </>
       )}
 
-      {/* 搜索和筛选控制 */}
-      <div style={{
-        position: 'fixed',
-        top: '20px',
-        left: '20px',
-        background: 'rgba(0, 0, 0, 0.9)',
-        backdropFilter: 'blur(20px)',
-        border: '1px solid rgba(255, 255, 255, 0.2)',
-        borderRadius: '12px',
-        padding: '16px',
-        color: 'white',
-        fontSize: '14px',
-        zIndex: 1000,
-        minWidth: '200px',
-        maxWidth: '220px'
-      }}>
-        <div style={{ marginBottom: '12px', fontWeight: 'bold' }}>
-          🌌 奇绩AI星图
-        </div>
-        {/* 视图切换（备选入口） */}
+      {/* 搜索和筛选控制（Galaxy 模式：左侧面板 | 卡片模式：顶栏一行） */}
+      {viewMode === 'galaxy' ? (
         <div style={{
+          position: 'fixed',
+          top: '20px',
+          left: '20px',
+          background: 'rgba(0, 0, 0, 0.9)',
+          backdropFilter: 'blur(20px)',
+          border: '1px solid rgba(255, 255, 255, 0.2)',
+          borderRadius: '12px',
+          padding: '16px',
+          color: 'white',
+          fontSize: '14px',
+          zIndex: 1200,
+          minWidth: '200px',
+          maxWidth: '220px'
+        }}>
+          <div style={{ marginBottom: '12px', fontWeight: 'bold' }}>
+            🌌 奇绩AI星图
+          </div>
+          {/* 视图切换（备选入口） */}
+          <div style={{ display: 'flex', gap: '6px', marginBottom: '10px', background: 'rgba(255,255,255,0.06)', borderRadius: 999, padding: 2 }}>
+            <button onClick={() => setViewMode('galaxy')} style={{ flex: 1, padding: '6px 8px', fontSize: 12, borderRadius: 999, border: 'none', cursor: 'pointer', color: '#111', background: '#fff' }}>🪐 星系</button>
+            <button onClick={() => setViewMode('cards')} style={{ flex: 1, padding: '6px 8px', fontSize: 12, borderRadius: 999, border: 'none', cursor: 'pointer', color: '#ddd', background: 'transparent' }}>🗂️ 卡片</button>
+          </div>
+          <input
+            type="text"
+            placeholder='搜索星星...'
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            style={{ width: '100%', padding: '8px', marginBottom: '8px', background: 'rgba(255, 255, 255, 0.1)', border: '1px solid rgba(255, 255, 255, 0.3)', borderRadius: '6px', color: 'white', boxSizing: 'border-box' }}
+          />
+          <select
+            value={selectedTag}
+            onChange={(e) => setSelectedTag(e.target.value)}
+            style={{ width: '100%', padding: '8px', background: 'rgba(255, 255, 255, 0.1)', border: '1px solid rgba(255, 255, 255, 0.3)', borderRadius: '6px', color: 'white' }}
+          >
+            <option value="all">全部分类</option>
+            {allTags.map(tag => (
+              <option key={tag} value={tag} style={{ color: 'black' }}>{tag}</option>
+            ))}
+          </select>
+          <div style={{ marginTop: '8px', fontSize: '12px', opacity: 0.7 }}>
+            ⭐ {filteredAgents.length} 颗AI星星
+          </div>
+          
+          {/* 弹幕控制区域 */}
+          <div style={{ marginTop: '12px', paddingTop: '12px', borderTop: '1px solid rgba(255, 255, 255, 0.2)' }}>
+            <div style={{ marginBottom: '8px', fontSize: '12px', fontWeight: 'bold' }}>💬 弹幕系统</div>
+            <div style={{ display: 'flex', gap: '6px', marginBottom: '6px' }}>
+              <button onClick={() => setDanmakuInputVisible(!danmakuInputVisible)} style={{ flex: 1, padding: '6px 8px', background: danmakuInputVisible ? 'rgba(255, 255, 255, 0.2)' : 'rgba(255, 255, 255, 0.1)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255, 255, 255, 0.3)', borderRadius: '6px', color: 'white', fontSize: '11px', cursor: 'pointer', transition: 'all 0.3s ease', textShadow: '0 0 10px rgba(255, 255, 255, 0.3)' }}>{danmakuInputVisible ? '关闭输入' : '发送弹幕'}</button>
+              <button onClick={() => setDanmakuPlaying(!danmakuPlaying)} style={{ flex: 1, padding: '6px 8px', background: danmakuPlaying ? 'rgba(255, 255, 255, 0.2)' : 'rgba(255, 255, 255, 0.1)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255, 255, 255, 0.3)', borderRadius: '6px', color: 'white', fontSize: '11px', cursor: 'pointer', transition: 'all 0.3s ease', textShadow: '0 0 10px rgba(255, 255, 255, 0.3)' }}>{danmakuPlaying ? '停止播放' : '播放弹幕'}</button>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div style={{
+          position: 'fixed',
+          top: '20px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          zIndex: 1300,
           display: 'flex',
-          gap: '6px',
-          marginBottom: '10px',
-          background: 'rgba(255,255,255,0.06)',
+          alignItems: 'center',
+          gap: '10px',
+          padding: '10px 14px',
+          background: 'rgba(0,0,0,0.85)',
+          border: '1px solid rgba(255,255,255,0.2)',
           borderRadius: 999,
-          padding: 2,
+          backdropFilter: 'blur(12px)'
         }}>
-          <button
-            onClick={() => setViewMode('galaxy')}
-            style={{
-              flex: 1,
-              padding: '6px 8px',
-              fontSize: 12,
-              borderRadius: 999,
-              border: 'none',
-              cursor: 'pointer',
-              color: viewMode === 'galaxy' ? '#111' : '#ddd',
-              background: viewMode === 'galaxy' ? '#fff' : 'transparent',
-            }}
+          <div style={{ fontWeight: 'bold', color: '#fff', whiteSpace: 'nowrap' }}>🌌 奇绩AI星图</div>
+          <input
+            type="text"
+            placeholder='搜索工具...'
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            style={{ width: 240, padding: '8px', background: 'rgba(255, 255, 255, 0.1)', border: '1px solid rgba(255, 255, 255, 0.3)', borderRadius: '6px', color: 'white' }}
+          />
+          <select
+            value={selectedTag}
+            onChange={(e) => setSelectedTag(e.target.value)}
+            style={{ width: 160, padding: '8px', background: 'rgba(255, 255, 255, 0.1)', border: '1px solid rgba(255, 255, 255, 0.3)', borderRadius: '6px', color: 'white' }}
           >
-            🪐 星系
-          </button>
-          <button
-            onClick={() => setViewMode('cards')}
-            style={{
-              flex: 1,
-              padding: '6px 8px',
-              fontSize: 12,
-              borderRadius: 999,
-              border: 'none',
-              cursor: 'pointer',
-              color: viewMode === 'cards' ? '#111' : '#ddd',
-              background: viewMode === 'cards' ? '#fff' : 'transparent',
-            }}
-          >
-            🗂️ 卡片
-          </button>
-        </div>
-        <input
-          type="text"
-          placeholder={viewMode === 'galaxy' ? '搜索星星...' : '搜索工具...'}
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          style={{
-            width: '100%',
-            padding: '8px',
-            marginBottom: '8px',
-            background: 'rgba(255, 255, 255, 0.1)',
-            border: '1px solid rgba(255, 255, 255, 0.3)',
-            borderRadius: '6px',
-            color: 'white',
-            boxSizing: 'border-box'
-          }}
-        />
-        <select
-          value={selectedTag}
-          onChange={(e) => setSelectedTag(e.target.value)}
-          style={{
-            width: '100%',
-            padding: '8px',
-            background: 'rgba(255, 255, 255, 0.1)',
-            border: '1px solid rgba(255, 255, 255, 0.3)',
-            borderRadius: '6px',
-            color: 'white'
-          }}
-        >
-          <option value="all">全部分类</option>
-          {allTags.map(tag => (
-            <option key={tag} value={tag} style={{ color: 'black' }}>{tag}</option>
-          ))}
-        </select>
-        <div style={{ marginTop: '8px', fontSize: '12px', opacity: 0.7 }}>
-          {viewMode === 'galaxy' ? `⭐ ${filteredAgents.length} 颗AI星星` : `🗂️ ${filteredAgents.length} 个AI工具`}
-        </div>
-        
-        {/* 弹幕控制区域 */}
-        <div style={{ 
-          marginTop: '12px', 
-          paddingTop: '12px', 
-          borderTop: '1px solid rgba(255, 255, 255, 0.2)' 
-        }}>
-          <div style={{ marginBottom: '8px', fontSize: '12px', fontWeight: 'bold' }}>
-            💬 弹幕系统
-          </div>
-          <div style={{ display: 'flex', gap: '6px', marginBottom: '6px' }}>
-            <button
-              onClick={() => setDanmakuInputVisible(!danmakuInputVisible)}
-              style={{
-                flex: 1,
-                padding: '6px 8px',
-                background: danmakuInputVisible 
-                  ? 'rgba(255, 255, 255, 0.2)' 
-                  : 'rgba(255, 255, 255, 0.1)',
-                backdropFilter: 'blur(10px)',
-                border: '1px solid rgba(255, 255, 255, 0.3)',
-                borderRadius: '6px',
-                color: 'white',
-                fontSize: '11px',
-                cursor: 'pointer',
-                transition: 'all 0.3s ease',
-                textShadow: '0 0 10px rgba(255, 255, 255, 0.3)'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.25)'
-                e.currentTarget.style.transform = 'translateY(-1px)'
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = danmakuInputVisible 
-                  ? 'rgba(255, 255, 255, 0.2)' 
-                  : 'rgba(255, 255, 255, 0.1)'
-                e.currentTarget.style.transform = 'translateY(0)'
-              }}
-            >
-              {danmakuInputVisible ? '关闭输入' : '发送弹幕'}
-            </button>
-            <button
-              onClick={() => setDanmakuPlaying(!danmakuPlaying)}
-              style={{
-                flex: 1,
-                padding: '6px 8px',
-                background: danmakuPlaying 
-                  ? 'rgba(255, 255, 255, 0.2)' 
-                  : 'rgba(255, 255, 255, 0.1)',
-                backdropFilter: 'blur(10px)',
-                border: '1px solid rgba(255, 255, 255, 0.3)',
-                borderRadius: '6px',
-                color: 'white',
-                fontSize: '11px',
-                cursor: 'pointer',
-                transition: 'all 0.3s ease',
-                textShadow: '0 0 10px rgba(255, 255, 255, 0.3)'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.25)'
-                e.currentTarget.style.transform = 'translateY(-1px)'
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = danmakuPlaying 
-                  ? 'rgba(255, 255, 255, 0.2)' 
-                  : 'rgba(255, 255, 255, 0.1)'
-                e.currentTarget.style.transform = 'translateY(0)'
-              }}
-            >
-              {danmakuPlaying ? '停止播放' : '播放弹幕'}
-            </button>
+            <option value="all">全部分类</option>
+            {allTags.map(tag => (
+              <option key={tag} value={tag} style={{ color: 'black' }}>{tag}</option>
+            ))}
+          </select>
+          <div style={{ color: 'rgba(255,255,255,0.7)', fontSize: 12, whiteSpace: 'nowrap' }}>🗂️ {filteredAgents.length} 个AI工具</div>
+          <div style={{ display: 'flex', background: 'rgba(255,255,255,0.06)', borderRadius: 999, padding: 2 }}>
+            <button onClick={() => setViewMode('galaxy')} style={{ padding: '6px 10px', fontSize: 12, borderRadius: 999, border: 'none', cursor: 'pointer', color: '#ddd', background: 'transparent' }}>🪐</button>
+            <button onClick={() => setViewMode('cards')} style={{ padding: '6px 10px', fontSize: 12, borderRadius: 999, border: 'none', cursor: 'pointer', color: '#111', background: '#fff' }}>🗂️</button>
           </div>
         </div>
-      </div>
+      )}
 
       {/* 反馈按钮 */}
       <div style={{
@@ -438,7 +365,7 @@ export default function Galaxy3DPage() {
       </div>
 
       {/* 右下角视图切换 + 版权 */}
-      <div style={{ position: 'fixed', bottom: '16px', right: '16px', zIndex: 1200, display: 'flex', flexDirection: 'column', gap: '6px', alignItems: 'flex-end' }}>
+      <div style={{ position: 'fixed', bottom: '16px', right: '16px', zIndex: 3000, display: 'flex', flexDirection: 'column', gap: '6px', alignItems: 'flex-end' }}>
         <div
           style={{
             display: 'flex',
