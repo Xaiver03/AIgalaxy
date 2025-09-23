@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import dynamic from 'next/dynamic'
 import ProductCards from '@/components/ProductCards'
+import { StarField } from '@/components/StarField'
 
 const GalaxyStarSystem = dynamic(() => import('@/components/GalaxyStarSystem'), {
   loading: () => <div style={{ 
@@ -214,19 +215,23 @@ export default function Galaxy3DPage() {
 
       {/* 视图区域 */}
       {viewMode === 'galaxy' ? (
-        <GalaxyStarSystem 
+        <GalaxyStarSystem
           agents={filteredAgents.map(a => ({ ...a, themeColor: a.themeColor || undefined })) as any}
         />
       ) : (
-        <ProductCards 
-          agents={filteredAgents}
-          loading={loading}
-          searchTerm={searchTerm}
-          selectedTag={selectedTag}
-          allTags={allTags}
-          onSearchChange={setSearchTerm}
-          onTagChange={setSelectedTag}
-        />
+        <div style={{ position: 'relative', minHeight: '100vh' }}>
+          {/* 共享背景 - 卡片模式使用与星系模式一致的背景 */}
+          <StarField />
+          <ProductCards
+            agents={filteredAgents}
+            loading={loading}
+            searchTerm={searchTerm}
+            selectedTag={selectedTag}
+            allTags={allTags}
+            onSearchChange={setSearchTerm}
+            onTagChange={setSelectedTag}
+          />
+        </div>
       )}
 
       {/* 搜索和筛选控制（Galaxy 模式：左侧面板 | 卡片模式：顶栏一行） */}
