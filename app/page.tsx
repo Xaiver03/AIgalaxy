@@ -282,9 +282,13 @@ export default function Galaxy3DPage() {
               animation: 'glow 2s ease-in-out infinite alternate',
               letterSpacing: '2px',
               margin: 0,
-              padding: 0
+              padding: 0,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '12px'
             }}>
-              MiraclePlus AI Galaxy
+              🚀 奇绩AI产品展示
             </h1>
             <p style={{
               fontSize: '16px',
@@ -292,7 +296,7 @@ export default function Galaxy3DPage() {
               margin: '8px 0 0 0',
               textShadow: '0 0 5px rgba(192, 192, 192, 0.5)'
             }}>
-              探索奇绩AI的星海
+              探索最前沿的AI工具和应用
             </p>
           </div>
 
@@ -314,14 +318,19 @@ export default function Galaxy3DPage() {
               borderRadius: 999,
               backdropFilter: 'blur(12px)'
             }}>
-              <div style={{ fontWeight: 'bold', color: '#fff', whiteSpace: 'nowrap' }}>🌌 奇绩AI星图</div>
+              <div style={{ fontWeight: 'bold', color: '#fff', whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                🔍 搜索产品
+              </div>
               <input
                 type="text"
-                placeholder='搜索工具...'
+                placeholder='搜索AI工具...'
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 style={{ width: 240, padding: '8px', background: 'rgba(255, 255, 255, 0.1)', border: '1px solid rgba(255, 255, 255, 0.3)', borderRadius: '6px', color: 'white' }}
               />
+              <div style={{ color: '#fff', fontSize: 12, whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                🏷️ 产品分类
+              </div>
               <select
                 value={selectedTag}
                 onChange={(e) => setSelectedTag(e.target.value)}
@@ -332,7 +341,9 @@ export default function Galaxy3DPage() {
                   <option key={tag} value={tag} style={{ color: 'black' }}>{tag}</option>
                 ))}
               </select>
-              <div style={{ color: 'rgba(255,255,255,0.7)', fontSize: 12, whiteSpace: 'nowrap' }}>🗂️ {filteredAgents.length} 个AI工具</div>
+              <div style={{ color: 'rgba(255,255,255,0.7)', fontSize: 12, whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                ⭐ 找到 {filteredAgents.length} 个AI产品
+              </div>
               <div style={{ display: 'flex', background: 'rgba(255,255,255,0.06)', borderRadius: 999, padding: 2 }}>
                 <button onClick={() => setViewMode('galaxy')} style={{ padding: '6px 10px', fontSize: 12, borderRadius: 999, border: 'none', cursor: 'pointer', color: '#ddd', background: 'transparent' }}>🪐</button>
                 <button onClick={() => setViewMode('cards')} style={{ padding: '6px 10px', fontSize: 12, borderRadius: 999, border: 'none', cursor: 'pointer', color: '#111', background: '#fff' }}>🗂️</button>
