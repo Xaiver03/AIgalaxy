@@ -51,10 +51,7 @@ export default function Galaxy3DPage() {
   const [loading, setLoading] = useState(true)
   const [danmakuInputVisible, setDanmakuInputVisible] = useState(false)
   const [danmakuPlaying, setDanmakuPlaying] = useState(false)
-  const [viewMode, setViewMode] = useState<'galaxy' | 'cards'>(() => {
-    if (typeof window === 'undefined') return 'galaxy'
-    return (localStorage.getItem('ai-galaxy-view') as 'galaxy' | 'cards') || 'galaxy'
-  })
+  const [viewMode, setViewMode] = useState<'galaxy' | 'cards'>('galaxy')  // 服务器端总是渲染galaxy模式
   const [hydrated, setHydrated] = useState(false)
 
   useEffect(() => {
@@ -69,10 +66,10 @@ export default function Galaxy3DPage() {
   }, [viewMode])
 
   useEffect(() => {
-    // 首次挂载后再读取一次，避免SSR导致的初始值不一致
+    // 首次挂载后再读取localStorage，避免SSR不一致
     if (typeof window !== 'undefined') {
       const saved = (localStorage.getItem('ai-galaxy-view') as 'galaxy' | 'cards') || 'galaxy'
-      if (saved !== viewMode) setViewMode(saved)
+      setViewMode(saved)
     }
     setHydrated(true)
   }, [])
