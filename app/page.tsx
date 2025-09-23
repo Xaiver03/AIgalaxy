@@ -52,8 +52,42 @@ export default function Galaxy3DPage() {
   const [danmakuInputVisible, setDanmakuInputVisible] = useState(false)
   const [danmakuPlaying, setDanmakuPlaying] = useState(false)
   const [viewMode, setViewMode] = useState<'galaxy' | 'cards'>('galaxy')
+  const [initialized, setInitialized] = useState(false)
 
-  console.log('🔍 Galaxy3DPage渲染 - loading:', loading, 'agents:', agents.length)
+  console.log('🔍 Galaxy3DPage渲染 - loading:', loading, 'agents:', agents.length, 'initialized:', initialized)
+
+  // 强制初始化函数 - 避免函数提升问题
+  const initializeData = async () => {
+    console.log('🚀 初始化数据开始')
+    try {
+      setLoading(true)
+      const response = await fetch(`/api/agents?_=${Date.now()}`)
+      if (!response.ok) throw new Error('Failed to fetch agents')
+      const data = await response.json()
+      console.log('✅ 获取到数据:', data.agents?.length, 'agents')
+      setAgents(data.agents)
+
+      const allTagsSet = new Set<string>()
+      data.agents.forEach((agent: Agent) => {
+        if (Array.isArray(agent.tags)) {
+          agent.tags.forEach(tag => allTagsSet.add(tag))
+        }
+      })
+      setAllTags(Array.from(allTagsSet))
+      setInitialized(true)
+    } catch (err) {
+      console.error('❌ 数据获取失败:', err)
+    } finally {
+      setLoading(false)
+      console.log('✅ 初始化完成')
+    }
+  }
+
+  // 立即执行初始化 - 如果还没初始化
+  if (!initialized && loading) {
+    console.log('⚡ 立即执行初始化')
+    initializeData()
+  }
 
   useEffect(() => {
     console.log('🚀 useEffect执行开始')
@@ -66,7 +100,7 @@ export default function Galaxy3DPage() {
     }
 
     // 获取agents数据
-    fetchAgents()
+    initializeData()
   }, [])
 
   useEffect(() => {
