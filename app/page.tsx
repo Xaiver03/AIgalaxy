@@ -215,13 +215,131 @@ export default function Galaxy3DPage() {
 
       {/* 视图区域 */}
       {viewMode === 'galaxy' ? (
-        <GalaxyStarSystem
-          agents={filteredAgents.map(a => ({ ...a, themeColor: a.themeColor || undefined })) as any}
-        />
+        <>
+          {/* 银河系AI星图标题 */}
+          <div style={{
+            position: 'fixed',
+            top: '80px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            zIndex: 1001,
+            textAlign: 'center',
+            pointerEvents: 'none'
+          }}>
+            <h1 style={{
+              fontSize: '48px',
+              fontWeight: 'bold',
+              color: '#e5e5e5',
+              textShadow: `
+                0 0 10px rgba(192, 192, 192, 0.8),
+                0 0 20px rgba(192, 192, 192, 0.6),
+                0 0 30px rgba(192, 192, 192, 0.4),
+                0 0 40px rgba(192, 192, 192, 0.2)
+              `,
+              animation: 'glow 2s ease-in-out infinite alternate',
+              letterSpacing: '2px',
+              margin: 0,
+              padding: 0
+            }}>
+              MiraclePlus AI Galaxy
+            </h1>
+            <p style={{
+              fontSize: '16px',
+              color: 'rgba(192, 192, 192, 0.8)',
+              margin: '8px 0 0 0',
+              textShadow: '0 0 5px rgba(192, 192, 192, 0.5)'
+            }}>
+              探索奇绩AI的星海
+            </p>
+          </div>
+          <GalaxyStarSystem
+            agents={filteredAgents.map(a => ({ ...a, themeColor: a.themeColor || undefined })) as any}
+          />
+        </>
       ) : (
         <div style={{ position: 'relative', minHeight: '100vh' }}>
           {/* 共享背景 - 卡片模式使用与星系模式一致的背景 */}
           <StarField />
+
+          {/* 卡片模式标题 */}
+          <div style={{
+            position: 'relative',
+            zIndex: 10,
+            textAlign: 'center',
+            paddingTop: '80px',
+            paddingBottom: '20px'
+          }}>
+            <h1 style={{
+              fontSize: '48px',
+              fontWeight: 'bold',
+              color: '#e5e5e5',
+              textShadow: `
+                0 0 10px rgba(192, 192, 192, 0.8),
+                0 0 20px rgba(192, 192, 192, 0.6),
+                0 0 30px rgba(192, 192, 192, 0.4),
+                0 0 40px rgba(192, 192, 192, 0.2)
+              `,
+              animation: 'glow 2s ease-in-out infinite alternate',
+              letterSpacing: '2px',
+              margin: 0,
+              padding: 0
+            }}>
+              MiraclePlus AI Galaxy
+            </h1>
+            <p style={{
+              fontSize: '16px',
+              color: 'rgba(192, 192, 192, 0.8)',
+              margin: '8px 0 0 0',
+              textShadow: '0 0 5px rgba(192, 192, 192, 0.5)'
+            }}>
+              探索奇绩AI的星海
+            </p>
+          </div>
+
+          {/* 卡片模式搜索工具栏 */}
+          <div style={{
+            position: 'relative',
+            zIndex: 10,
+            display: 'flex',
+            justifyContent: 'center',
+            paddingBottom: '30px'
+          }}>
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '10px',
+              padding: '10px 14px',
+              background: 'rgba(0,0,0,0.85)',
+              border: '1px solid rgba(255,255,255,0.2)',
+              borderRadius: 999,
+              backdropFilter: 'blur(12px)'
+            }}>
+              <div style={{ fontWeight: 'bold', color: '#fff', whiteSpace: 'nowrap' }}>🌌 奇绩AI星图</div>
+              <input
+                type="text"
+                placeholder='搜索工具...'
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                style={{ width: 240, padding: '8px', background: 'rgba(255, 255, 255, 0.1)', border: '1px solid rgba(255, 255, 255, 0.3)', borderRadius: '6px', color: 'white' }}
+              />
+              <select
+                value={selectedTag}
+                onChange={(e) => setSelectedTag(e.target.value)}
+                style={{ width: 160, padding: '8px', background: 'rgba(255, 255, 255, 0.1)', border: '1px solid rgba(255, 255, 255, 0.3)', borderRadius: '6px', color: 'white' }}
+              >
+                <option value="all">全部分类</option>
+                {allTags.map(tag => (
+                  <option key={tag} value={tag} style={{ color: 'black' }}>{tag}</option>
+                ))}
+              </select>
+              <div style={{ color: 'rgba(255,255,255,0.7)', fontSize: 12, whiteSpace: 'nowrap' }}>🗂️ {filteredAgents.length} 个AI工具</div>
+              <div style={{ display: 'flex', background: 'rgba(255,255,255,0.06)', borderRadius: 999, padding: 2 }}>
+                <button onClick={() => setViewMode('galaxy')} style={{ padding: '6px 10px', fontSize: 12, borderRadius: 999, border: 'none', cursor: 'pointer', color: '#ddd', background: 'transparent' }}>🪐</button>
+                <button onClick={() => setViewMode('cards')} style={{ padding: '6px 10px', fontSize: 12, borderRadius: 999, border: 'none', cursor: 'pointer', color: '#111', background: '#fff' }}>🗂️</button>
+              </div>
+            </div>
+          </div>
+
           <ProductCards
             agents={filteredAgents}
             loading={loading}
@@ -234,8 +352,8 @@ export default function Galaxy3DPage() {
         </div>
       )}
 
-      {/* 搜索和筛选控制（Galaxy 模式：左侧面板 | 卡片模式：顶栏一行） */}
-      {viewMode === 'galaxy' ? (
+      {/* 搜索和筛选控制（仅Galaxy模式：左侧面板）*/}
+      {viewMode === 'galaxy' && (
         <div style={{
           position: 'fixed',
           top: '20px',
@@ -287,46 +405,6 @@ export default function Galaxy3DPage() {
               <button onClick={() => setDanmakuInputVisible(!danmakuInputVisible)} style={{ flex: 1, padding: '6px 8px', background: danmakuInputVisible ? 'rgba(255, 255, 255, 0.2)' : 'rgba(255, 255, 255, 0.1)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255, 255, 255, 0.3)', borderRadius: '6px', color: 'white', fontSize: '11px', cursor: 'pointer', transition: 'all 0.3s ease', textShadow: '0 0 10px rgba(255, 255, 255, 0.3)' }}>{danmakuInputVisible ? '关闭输入' : '发送弹幕'}</button>
               <button onClick={() => setDanmakuPlaying(!danmakuPlaying)} style={{ flex: 1, padding: '6px 8px', background: danmakuPlaying ? 'rgba(255, 255, 255, 0.2)' : 'rgba(255, 255, 255, 0.1)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255, 255, 255, 0.3)', borderRadius: '6px', color: 'white', fontSize: '11px', cursor: 'pointer', transition: 'all 0.3s ease', textShadow: '0 0 10px rgba(255, 255, 255, 0.3)' }}>{danmakuPlaying ? '停止播放' : '播放弹幕'}</button>
             </div>
-          </div>
-        </div>
-      ) : (
-        <div style={{
-          position: 'fixed',
-          top: '20px',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          zIndex: 1300,
-          display: 'flex',
-          alignItems: 'center',
-          gap: '10px',
-          padding: '10px 14px',
-          background: 'rgba(0,0,0,0.85)',
-          border: '1px solid rgba(255,255,255,0.2)',
-          borderRadius: 999,
-          backdropFilter: 'blur(12px)'
-        }}>
-          <div style={{ fontWeight: 'bold', color: '#fff', whiteSpace: 'nowrap' }}>🌌 奇绩AI星图</div>
-          <input
-            type="text"
-            placeholder='搜索工具...'
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            style={{ width: 240, padding: '8px', background: 'rgba(255, 255, 255, 0.1)', border: '1px solid rgba(255, 255, 255, 0.3)', borderRadius: '6px', color: 'white' }}
-          />
-          <select
-            value={selectedTag}
-            onChange={(e) => setSelectedTag(e.target.value)}
-            style={{ width: 160, padding: '8px', background: 'rgba(255, 255, 255, 0.1)', border: '1px solid rgba(255, 255, 255, 0.3)', borderRadius: '6px', color: 'white' }}
-          >
-            <option value="all">全部分类</option>
-            {allTags.map(tag => (
-              <option key={tag} value={tag} style={{ color: 'black' }}>{tag}</option>
-            ))}
-          </select>
-          <div style={{ color: 'rgba(255,255,255,0.7)', fontSize: 12, whiteSpace: 'nowrap' }}>🗂️ {filteredAgents.length} 个AI工具</div>
-          <div style={{ display: 'flex', background: 'rgba(255,255,255,0.06)', borderRadius: 999, padding: 2 }}>
-            <button onClick={() => setViewMode('galaxy')} style={{ padding: '6px 10px', fontSize: 12, borderRadius: 999, border: 'none', cursor: 'pointer', color: '#ddd', background: 'transparent' }}>🪐</button>
-            <button onClick={() => setViewMode('cards')} style={{ padding: '6px 10px', fontSize: 12, borderRadius: 999, border: 'none', cursor: 'pointer', color: '#111', background: '#fff' }}>🗂️</button>
           </div>
         </div>
       )}

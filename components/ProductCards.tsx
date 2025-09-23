@@ -45,11 +45,9 @@ const ProductCards: React.FC<ProductCardsProps> = ({
   }))
 
   return (
-    <div style={{ position: 'relative', minHeight: '100vh' }}>
-      {/* 卡片网格 - 移除内部背景和工具栏，由父页面统一管理 */}
-      <div style={{ paddingTop: '80px' }}>
-        <AgentsCardGrid agents={normalizedAgents} />
-      </div>
+    <div style={{ position: 'relative' }}>
+      {/* 卡片网格 - 布局和间距由父页面管理 */}
+      <AgentsCardGrid agents={normalizedAgents} />
 
       {loading && (
         <div style={{ position: 'fixed', top: 80, left: '50%', transform: 'translateX(-50%)', color: '#fff', opacity: 0.7 }}>加载中...</div>
