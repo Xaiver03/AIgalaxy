@@ -51,16 +51,17 @@ export default function Galaxy3DPage() {
   const [loading, setLoading] = useState(true)
   const [danmakuInputVisible, setDanmakuInputVisible] = useState(false)
   const [danmakuPlaying, setDanmakuPlaying] = useState(false)
-  const [viewMode, setViewMode] = useState<'galaxy' | 'cards'>('galaxy')  // 服务器端总是渲染galaxy模式
-  const [hydrated, setHydrated] = useState(false)
+  const [viewMode, setViewMode] = useState<'galaxy' | 'cards'>('galaxy')
+
+  console.log('🔍 Galaxy3DPage渲染 - loading:', loading, 'agents:', agents.length)
 
   useEffect(() => {
-    // 立即设置hydrated状态以避免长时间卡在初始化界面
-    setHydrated(true)
+    console.log('🚀 useEffect执行开始')
 
-    // 读取localStorage并获取数据
+    // 读取localStorage
     if (typeof window !== 'undefined') {
       const saved = (localStorage.getItem('ai-galaxy-view') as 'galaxy' | 'cards') || 'galaxy'
+      console.log('📱 读取到viewMode:', saved)
       setViewMode(saved)
     }
 
@@ -72,6 +73,7 @@ export default function Galaxy3DPage() {
     // 持久化视图模式
     if (typeof window !== 'undefined') {
       localStorage.setItem('ai-galaxy-view', viewMode)
+      console.log('💾 保存viewMode:', viewMode)
     }
   }, [viewMode])
 
@@ -119,37 +121,7 @@ export default function Galaxy3DPage() {
     }
   }
 
-  // 确保hydration完成前始终显示加载状态，避免SSR不一致
-  if (!hydrated) {
-    return (
-      <div style={{
-        minHeight: '100vh',
-        background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        color: 'white'
-      }}>
-        <div style={{ textAlign: 'center' }}>
-          <div style={{
-            fontSize: '48px',
-            marginBottom: '20px',
-            animation: 'rotate 2s linear infinite'
-          }}>
-            🌌
-          </div>
-          <div style={{ fontSize: '18px', marginBottom: '10px' }}>
-            正在初始化奇绩AI星系...
-          </div>
-          <div style={{ fontSize: '14px', opacity: 0.7 }}>
-            准备观测星海中的奇绩AI智慧
-          </div>
-        </div>
-      </div>
-    )
-  }
-
-  // hydration完成后，根据loading状态决定是否显示内容加载状态
+  // 直接显示加载状态，无需hydration检查
   if (loading) {
     return (
       <div style={{
