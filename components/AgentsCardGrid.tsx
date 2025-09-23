@@ -45,12 +45,12 @@ const AgentsCardGrid: React.FC<AgentsCardGridProps> = ({ agents }) => {
                 display: 'flex',
                 flexDirection: 'column',
                 height: 200,
-                background: 'rgba(0, 0, 0, 0.75)',
-                backdropFilter: 'blur(12px)',
-                border: '1px solid rgba(255,255,255,0.15)',
+                background: 'rgba(0, 0, 0, 0.6)',
+                backdropFilter: 'blur(20px)',
+                border: '1px solid rgba(255,255,255,0.2)',
                 borderRadius: 12,
                 overflow: 'hidden',
-                boxShadow: '0 10px 30px rgba(0,0,0,0.4)',
+                boxShadow: '0 10px 30px rgba(0,0,0,0.3), 0 1px 0 rgba(255,255,255,0.1) inset',
               }}
             >
               {/* 上部主体：左右各一半 */}

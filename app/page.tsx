@@ -229,7 +229,11 @@ export default function Galaxy3DPage() {
           agents={filteredAgents.map(a => ({ ...a, themeColor: a.themeColor || undefined })) as any}
         />
       ) : (
-        <div style={{ position: 'relative', minHeight: '100vh' }}>
+        <div style={{
+          position: 'relative',
+          minHeight: '100vh',
+          background: 'radial-gradient(ellipse at center, #0a0a0a 0%, #000000 70%, #000000 100%)'
+        }}>
           {/* 共享背景 - 卡片模式使用与星系模式一致的背景 */}
           <StarField />
 
@@ -276,49 +280,86 @@ export default function Galaxy3DPage() {
           <div style={{
             position: 'relative',
             zIndex: 10,
-            display: 'flex',
-            justifyContent: 'center',
-            paddingBottom: '20px'
+            padding: '0 20px',
+            paddingBottom: '12px'
           }}>
             <div style={{
               display: 'flex',
               alignItems: 'center',
-              gap: '10px',
-              padding: '10px 14px',
-              background: 'rgba(0,0,0,0.85)',
-              border: '1px solid rgba(255,255,255,0.2)',
-              borderRadius: 999,
-              backdropFilter: 'blur(12px)'
+              flexWrap: 'wrap',
+              gap: '12px',
+              padding: '12px 20px',
+              background: 'rgba(0,0,0,0.4)',
+              backdropFilter: 'blur(20px)',
+              borderRadius: 0,
+              width: '100%',
+              justifyContent: 'space-between'
             }}>
-              <div style={{ fontWeight: 'bold', color: '#fff', whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                🔍 搜索产品
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '12px',
+                flex: '1',
+                minWidth: '300px'
+              }}>
+                <div style={{ fontWeight: 'bold', color: '#fff', whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  🔍 搜索产品
+                </div>
+                <input
+                  type="text"
+                  placeholder='搜索AI工具...'
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  style={{
+                    flex: '1',
+                    minWidth: '200px',
+                    maxWidth: '300px',
+                    padding: '8px 12px',
+                    background: 'rgba(255, 255, 255, 0.1)',
+                    border: '1px solid rgba(255, 255, 255, 0.2)',
+                    borderRadius: '8px',
+                    color: 'white',
+                    fontSize: '14px'
+                  }}
+                />
               </div>
-              <input
-                type="text"
-                placeholder='搜索AI工具...'
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                style={{ width: 240, padding: '8px', background: 'rgba(255, 255, 255, 0.1)', border: '1px solid rgba(255, 255, 255, 0.3)', borderRadius: '6px', color: 'white' }}
-              />
-              <div style={{ color: '#fff', fontSize: 12, whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                🏷️ 产品分类
-              </div>
-              <select
-                value={selectedTag}
-                onChange={(e) => setSelectedTag(e.target.value)}
-                style={{ width: 160, padding: '8px', background: 'rgba(255, 255, 255, 0.1)', border: '1px solid rgba(255, 255, 255, 0.3)', borderRadius: '6px', color: 'white' }}
-              >
-                <option value="all">全部分类</option>
-                {allTags.map(tag => (
-                  <option key={tag} value={tag} style={{ color: 'black' }}>{tag}</option>
-                ))}
-              </select>
-              <div style={{ color: 'rgba(255,255,255,0.7)', fontSize: 12, whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                ⭐ 找到 {filteredAgents.length} 个AI产品
-              </div>
-              <div style={{ display: 'flex', background: 'rgba(255,255,255,0.06)', borderRadius: 999, padding: 2 }}>
-                <button onClick={() => setViewMode('galaxy')} style={{ padding: '6px 10px', fontSize: 12, borderRadius: 999, border: 'none', cursor: 'pointer', color: '#ddd', background: 'transparent' }}>🪐</button>
-                <button onClick={() => setViewMode('cards')} style={{ padding: '6px 10px', fontSize: 12, borderRadius: 999, border: 'none', cursor: 'pointer', color: '#111', background: '#fff' }}>🗂️</button>
+
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '12px',
+                flexWrap: 'wrap'
+              }}>
+                <div style={{ color: '#fff', fontSize: 14, whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  🏷️ 产品分类
+                </div>
+                <select
+                  value={selectedTag}
+                  onChange={(e) => setSelectedTag(e.target.value)}
+                  style={{
+                    minWidth: '120px',
+                    padding: '8px 12px',
+                    background: 'rgba(255, 255, 255, 0.1)',
+                    border: '1px solid rgba(255, 255, 255, 0.2)',
+                    borderRadius: '8px',
+                    color: 'white',
+                    fontSize: '14px'
+                  }}
+                >
+                  <option value="all">全部分类</option>
+                  {allTags.map(tag => (
+                    <option key={tag} value={tag} style={{ color: 'black' }}>{tag}</option>
+                  ))}
+                </select>
+
+                <div style={{ color: 'rgba(255,255,255,0.8)', fontSize: 14, whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  ⭐ 找到 {filteredAgents.length} 个AI产品
+                </div>
+
+                <div style={{ display: 'flex', background: 'rgba(255,255,255,0.1)', borderRadius: '8px', padding: '2px' }}>
+                  <button onClick={() => setViewMode('galaxy')} style={{ padding: '6px 10px', fontSize: 12, borderRadius: '6px', border: 'none', cursor: 'pointer', color: '#ddd', background: 'transparent' }}>🪐</button>
+                  <button onClick={() => setViewMode('cards')} style={{ padding: '6px 10px', fontSize: 12, borderRadius: '6px', border: 'none', cursor: 'pointer', color: '#111', background: '#fff' }}>🗂️</button>
+                </div>
               </div>
             </div>
           </div>
