@@ -55,6 +55,16 @@ export default function Galaxy3DPage() {
   const [hydrated, setHydrated] = useState(false)
 
   useEffect(() => {
+    // 立即设置hydrated状态以避免长时间卡在初始化界面
+    setHydrated(true)
+
+    // 读取localStorage并获取数据
+    if (typeof window !== 'undefined') {
+      const saved = (localStorage.getItem('ai-galaxy-view') as 'galaxy' | 'cards') || 'galaxy'
+      setViewMode(saved)
+    }
+
+    // 获取agents数据
     fetchAgents()
   }, [])
 
@@ -64,15 +74,6 @@ export default function Galaxy3DPage() {
       localStorage.setItem('ai-galaxy-view', viewMode)
     }
   }, [viewMode])
-
-  useEffect(() => {
-    // 首次挂载后再读取localStorage，避免SSR不一致
-    if (typeof window !== 'undefined') {
-      const saved = (localStorage.getItem('ai-galaxy-view') as 'galaxy' | 'cards') || 'galaxy'
-      setViewMode(saved)
-    }
-    setHydrated(true)
-  }, [])
 
   useEffect(() => {
     let filtered = agents.filter(agent => agent.enabled)
