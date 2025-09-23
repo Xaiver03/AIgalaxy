@@ -118,7 +118,8 @@ export default function Galaxy3DPage() {
     }
   }
 
-  if (loading || !hydrated) {
+  // 确保hydration完成前始终显示加载状态，避免SSR不一致
+  if (!hydrated) {
     return (
       <div style={{
         minHeight: '100vh',
@@ -129,8 +130,8 @@ export default function Galaxy3DPage() {
         color: 'white'
       }}>
         <div style={{ textAlign: 'center' }}>
-          <div style={{ 
-            fontSize: '48px', 
+          <div style={{
+            fontSize: '48px',
             marginBottom: '20px',
             animation: 'rotate 2s linear infinite'
           }}>
@@ -141,6 +142,36 @@ export default function Galaxy3DPage() {
           </div>
           <div style={{ fontSize: '14px', opacity: 0.7 }}>
             准备观测星海中的奇绩AI智慧
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // hydration完成后，根据loading状态决定是否显示内容加载状态
+  if (loading) {
+    return (
+      <div style={{
+        minHeight: '100vh',
+        background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        color: 'white'
+      }}>
+        <div style={{ textAlign: 'center' }}>
+          <div style={{
+            fontSize: '48px',
+            marginBottom: '20px',
+            animation: 'rotate 2s linear infinite'
+          }}>
+            🌌
+          </div>
+          <div style={{ fontSize: '18px', marginBottom: '10px' }}>
+            加载AI星系数据...
+          </div>
+          <div style={{ fontSize: '14px', opacity: 0.7 }}>
+            正在获取星海中的奇绩AI智慧
           </div>
         </div>
       </div>
