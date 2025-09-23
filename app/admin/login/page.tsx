@@ -42,13 +42,40 @@ export default function AdminLogin() {
   }
 
   return (
-    <div style={{ 
-      minHeight: '100vh', 
-      display: 'flex', 
-      alignItems: 'center', 
+    <div style={{
+      minHeight: '100vh',
+      display: 'flex',
+      alignItems: 'center',
       justifyContent: 'center',
       background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
     }}>
+      {/* 强制修复输入框文字颜色的全局样式 */}
+      <style jsx global>{`
+        .ant-input {
+          color: #000000 !important;
+          background-color: #ffffff !important;
+        }
+        .ant-input::placeholder {
+          color: #999999 !important;
+        }
+        .ant-input-password .ant-input {
+          color: #000000 !important;
+          background-color: #ffffff !important;
+        }
+        .ant-input-affix-wrapper {
+          background-color: #ffffff !important;
+        }
+        .ant-input-affix-wrapper .ant-input {
+          color: #000000 !important;
+          background-color: transparent !important;
+        }
+        #admin-email,
+        #admin-password {
+          color: #000000 !important;
+          background-color: #ffffff !important;
+        }
+      `}</style>
+
       <Card style={{ width: 400 }}>
         <div style={{ textAlign: 'center', marginBottom: 24 }}>
           <Title level={2}>管理员登录</Title>
@@ -63,49 +90,29 @@ export default function AdminLogin() {
             label="邮箱"
             rules={[{ required: true, message: '请输入邮箱' }]}
           >
-            <Input 
+            <Input
               id="admin-email"
-              prefix={<UserOutlined />} 
+              prefix={<UserOutlined />}
               placeholder="admin@example.com"
-              style={{
-                color: '#000000 !important',
-                backgroundColor: '#ffffff !important'
-              }}
-              styles={{
-                input: {
-                  color: '#000000 !important',
-                  backgroundColor: '#ffffff !important'
-                }
-              }}
             />
           </Form.Item>
-          
+
           <Form.Item
             name="password"
             label="密码"
             rules={[{ required: true, message: '请输入密码' }]}
           >
-            <Input.Password 
+            <Input.Password
               id="admin-password"
-              prefix={<LockOutlined />} 
+              prefix={<LockOutlined />}
               placeholder="请输入密码"
-              style={{
-                color: '#000000 !important',
-                backgroundColor: '#ffffff !important'
-              }}
-              styles={{
-                input: {
-                  color: '#000000 !important',
-                  backgroundColor: '#ffffff !important'
-                }
-              }}
             />
           </Form.Item>
-          
+
           <Form.Item>
-            <Button 
-              type="primary" 
-              htmlType="submit" 
+            <Button
+              type="primary"
+              htmlType="submit"
               loading={loading}
               style={{ width: '100%' }}
             >
