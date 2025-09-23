@@ -193,69 +193,39 @@ export default function Galaxy3DPage() {
         </p>
       </div>
 
-      {/* CSS动画 */}
+      {/* CSS动画 - 增加脉冲效果 */}
       <style jsx global>{`
         @keyframes glow {
           from {
-            text-shadow: 
+            text-shadow:
               0 0 10px rgba(192, 192, 192, 0.8),
               0 0 20px rgba(192, 192, 192, 0.6),
               0 0 30px rgba(192, 192, 192, 0.4),
               0 0 40px rgba(192, 192, 192, 0.2);
           }
           to {
-            text-shadow: 
+            text-shadow:
               0 0 20px rgba(192, 192, 192, 1),
               0 0 30px rgba(192, 192, 192, 0.8),
               0 0 50px rgba(192, 192, 192, 0.6),
               0 0 70px rgba(192, 192, 192, 0.4);
           }
         }
+        @keyframes pulse {
+          0%, 100% {
+            box-shadow: 0 8px 30px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.1);
+          }
+          50% {
+            box-shadow: 0 8px 40px rgba(0,0,0,0.8), 0 0 0 2px rgba(255,255,255,0.3);
+          }
+        }
       `}</style>
 
       {/* 视图区域 */}
       {viewMode === 'galaxy' ? (
-        <>
-          {/* 银河系AI星图标题 */}
-          <div style={{
-            position: 'fixed',
-            top: '80px',
-            left: '50%',
-            transform: 'translateX(-50%)',
-            zIndex: 1001,
-            textAlign: 'center',
-            pointerEvents: 'none'
-          }}>
-            <h1 style={{
-              fontSize: '48px',
-              fontWeight: 'bold',
-              color: '#e5e5e5',
-              textShadow: `
-                0 0 10px rgba(192, 192, 192, 0.8),
-                0 0 20px rgba(192, 192, 192, 0.6),
-                0 0 30px rgba(192, 192, 192, 0.4),
-                0 0 40px rgba(192, 192, 192, 0.2)
-              `,
-              animation: 'glow 2s ease-in-out infinite alternate',
-              letterSpacing: '2px',
-              margin: 0,
-              padding: 0
-            }}>
-              MiraclePlus AI Galaxy
-            </h1>
-            <p style={{
-              fontSize: '16px',
-              color: 'rgba(192, 192, 192, 0.8)',
-              margin: '8px 0 0 0',
-              textShadow: '0 0 5px rgba(192, 192, 192, 0.5)'
-            }}>
-              探索奇绩AI的星海
-            </p>
-          </div>
-          <GalaxyStarSystem
-            agents={filteredAgents.map(a => ({ ...a, themeColor: a.themeColor || undefined })) as any}
-          />
-        </>
+        <GalaxyStarSystem
+          agents={filteredAgents.map(a => ({ ...a, themeColor: a.themeColor || undefined })) as any}
+        />
       ) : (
         <div style={{ position: 'relative', minHeight: '100vh' }}>
           {/* 共享背景 - 卡片模式使用与星系模式一致的背景 */}
@@ -266,8 +236,8 @@ export default function Galaxy3DPage() {
             position: 'relative',
             zIndex: 10,
             textAlign: 'center',
-            paddingTop: '80px',
-            paddingBottom: '20px'
+            paddingTop: '60px',
+            paddingBottom: '16px'
           }}>
             <h1 style={{
               fontSize: '48px',
@@ -306,7 +276,7 @@ export default function Galaxy3DPage() {
             zIndex: 10,
             display: 'flex',
             justifyContent: 'center',
-            paddingBottom: '30px'
+            paddingBottom: '20px'
           }}>
             <div style={{
               display: 'flex',
@@ -470,7 +440,8 @@ export default function Galaxy3DPage() {
             border: viewMode === 'cards' ? '2px solid rgba(255,255,255,0.4)' : '1px solid rgba(255,255,255,0.2)',
             borderRadius: 999,
             overflow: 'hidden',
-            boxShadow: viewMode === 'cards' ? '0 8px 30px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.1)' : '0 8px 20px rgba(0,0,0,0.4)'
+            boxShadow: viewMode === 'cards' ? '0 8px 30px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.1)' : '0 8px 20px rgba(0,0,0,0.4)',
+            animation: viewMode === 'cards' ? 'pulse 2s infinite' : 'none'
           }}
         >
           <button
