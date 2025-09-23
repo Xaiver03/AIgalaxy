@@ -156,42 +156,44 @@ export default function Galaxy3DPage() {
       overflow: 'hidden',
       position: 'relative'
     }}>
-      {/* 银河系AI星图标题 */}
-      <div style={{
-        position: 'fixed',
-        top: '80px',
-        left: '50%',
-        transform: 'translateX(-50%)',
-        zIndex: 1001,
-        textAlign: 'center',
-        pointerEvents: 'none'
-      }}>
-        <h1 style={{
-          fontSize: '48px',
-          fontWeight: 'bold',
-          color: '#e5e5e5',
-          textShadow: `
-            0 0 10px rgba(192, 192, 192, 0.8),
-            0 0 20px rgba(192, 192, 192, 0.6),
-            0 0 30px rgba(192, 192, 192, 0.4),
-            0 0 40px rgba(192, 192, 192, 0.2)
-          `,
-          animation: 'glow 2s ease-in-out infinite alternate',
-          letterSpacing: '2px',
-          margin: 0,
-          padding: 0
+      {/* 银河系AI星图标题 - 仅在星系模式显示 */}
+      {viewMode === 'galaxy' && (
+        <div style={{
+          position: 'fixed',
+          top: '80px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          zIndex: 1001,
+          textAlign: 'center',
+          pointerEvents: 'none'
         }}>
-          MiraclePlus AI Galaxy
-        </h1>
-        <p style={{
-          fontSize: '16px',
-          color: 'rgba(192, 192, 192, 0.8)',
-          margin: '8px 0 0 0',
-          textShadow: '0 0 5px rgba(192, 192, 192, 0.5)'
-        }}>
-          探索奇绩AI的星海
-        </p>
-      </div>
+          <h1 style={{
+            fontSize: '48px',
+            fontWeight: 'bold',
+            color: '#e5e5e5',
+            textShadow: `
+              0 0 10px rgba(192, 192, 192, 0.8),
+              0 0 20px rgba(192, 192, 192, 0.6),
+              0 0 30px rgba(192, 192, 192, 0.4),
+              0 0 40px rgba(192, 192, 192, 0.2)
+            `,
+            animation: 'glow 2s ease-in-out infinite alternate',
+            letterSpacing: '2px',
+            margin: 0,
+            padding: 0
+          }}>
+            MiraclePlus AI Galaxy
+          </h1>
+          <p style={{
+            fontSize: '16px',
+            color: 'rgba(192, 192, 192, 0.8)',
+            margin: '8px 0 0 0',
+            textShadow: '0 0 5px rgba(192, 192, 192, 0.5)'
+          }}>
+            探索奇绩AI的星海
+          </p>
+        </div>
+      )}
 
       {/* CSS动画 - 增加脉冲效果 */}
       <style jsx global>{`
