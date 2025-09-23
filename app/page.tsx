@@ -377,22 +377,23 @@ export default function Galaxy3DPage() {
         <div
           style={{
             display: 'flex',
-            background: 'rgba(0,0,0,0.85)',
-            border: '1px solid rgba(255,255,255,0.2)',
+            background: viewMode === 'cards' ? 'rgba(0,0,0,0.95)' : 'rgba(0,0,0,0.85)',
+            border: viewMode === 'cards' ? '2px solid rgba(255,255,255,0.4)' : '1px solid rgba(255,255,255,0.2)',
             borderRadius: 999,
             overflow: 'hidden',
-            boxShadow: '0 8px 20px rgba(0,0,0,0.4)'
+            boxShadow: viewMode === 'cards' ? '0 8px 30px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.1)' : '0 8px 20px rgba(0,0,0,0.4)'
           }}
         >
           <button
             onClick={() => setViewMode('galaxy')}
             style={{
-              padding: '6px 10px',
+              padding: '8px 12px',
               fontSize: 12,
               color: viewMode === 'galaxy' ? '#111' : '#ddd',
               background: viewMode === 'galaxy' ? '#fff' : 'transparent',
               border: 'none',
-              cursor: 'pointer'
+              cursor: 'pointer',
+              fontWeight: viewMode === 'galaxy' ? 'bold' : 'normal'
             }}
           >
             🪐 星系
@@ -400,12 +401,13 @@ export default function Galaxy3DPage() {
           <button
             onClick={() => setViewMode('cards')}
             style={{
-              padding: '6px 10px',
+              padding: '8px 12px',
               fontSize: 12,
               color: viewMode === 'cards' ? '#111' : '#ddd',
               background: viewMode === 'cards' ? '#fff' : 'transparent',
               border: 'none',
-              cursor: 'pointer'
+              cursor: 'pointer',
+              fontWeight: viewMode === 'cards' ? 'bold' : 'normal'
             }}
           >
             🗂️ 卡片
